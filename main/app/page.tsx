@@ -32,9 +32,11 @@ const ALL_LABELS = [
 export default function Home() {
   const {
     isRecording,
+    isModelLoaded,
     currentItem,
     voiceItems,
     isProcessing,
+    performanceMetrics,
     startRecording,
     stopRecording,
   } = useVoiceNotes();
@@ -62,7 +64,12 @@ export default function Home() {
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-semibold text-gray-800">New Note</h2>
-            <RecordButton isRecording={isRecording} onStart={startRecording} onStop={stopRecording} />
+            <RecordButton 
+              isRecording={isRecording} 
+              isModelLoaded={isModelLoaded}
+              onStart={startRecording} 
+              onStop={stopRecording} 
+            />
           </div>
           {isProcessing && <ProcessingIndicator />}
         </div>
@@ -113,7 +120,10 @@ export default function Home() {
             <Button onClick={() => setIsLabelModalOpen(false)}>Close</Button>
           </DialogContent>
         </Dialog>
-        <PerformanceMetrics />
+        <PerformanceMetrics 
+          data={performanceMetrics}
+          isProcessing={isProcessing}
+        />
       </div>
     </main>
   );

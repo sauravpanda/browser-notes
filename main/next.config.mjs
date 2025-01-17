@@ -21,6 +21,17 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  transpilePackages: ['@huggingface/transformers'],
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+        path: false,
+        crypto: false
+      };
+    }
+    return config;
+  }
 }
 
 mergeConfig(nextConfig, userConfig)

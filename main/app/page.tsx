@@ -1,32 +1,65 @@
-'use client'
+"use client";
 
-import { useState } from 'react';
-import { useVoiceNotes } from '../hooks/useVoiceNotes';
-import RecordButton from './components/RecordButton';
-import ProcessingIndicator from './components/ProcessingIndicator';
-import VoiceItemCard from './components/VoiceItemCard';
-import LabelSelector from './components/LabelSelector';
-import { Plus, Mic } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { useVoiceNotes } from "../hooks/useVoiceNotes";
+import RecordButton from "./components/RecordButton";
+import ProcessingIndicator from "./components/ProcessingIndicator";
+import VoiceItemCard from "./components/VoiceItemCard";
+import LabelSelector from "./components/LabelSelector";
+import { Plus, Mic } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import PerformanceMetrics from './components/PerformanceMetrics';
+} from "@/components/ui/dialog";
+import PerformanceMetrics from "./components/PerformanceMetrics";
 
 const ALL_LABELS = [
-  'Reminders (Personal)', 'Shopping List', 'To-Do List (Personal)', 'Ideas (Personal)',
-  'Journal/Reflections', 'Health', 'Finances', 'Travel', 'Home', 'Relationships',
-  'Entertainment', 'Recipes', 'Dreams', 'Meeting Notes', 'Project Notes',
-  'Tasks/Action Items (Work)', 'Client Notes', 'Ideas (Work)', 'Research', 'Training',
-  'Feedback', 'Planning', 'Email Drafts/Reminders', 'Course Notes', 'Book Notes',
-  'Article Notes', 'Language Learning', 'Skills Development', 'Writing Ideas',
-  'Music Ideas', 'Art Ideas', 'Design Ideas', 'Action Items', 'Questions', 'Follow-up',
-  'Decisions', 'Important', 'Urgent', 'Reference', 'Quotes', 'Inspiration'
+  "Reminders (Personal)",
+  "Shopping List",
+  "To-Do List (Personal)",
+  "Ideas (Personal)",
+  "Journal/Reflections",
+  "Health",
+  "Finances",
+  "Travel",
+  "Home",
+  "Relationships",
+  "Entertainment",
+  "Recipes",
+  "Dreams",
+  "Meeting Notes",
+  "Project Notes",
+  "Tasks/Action Items (Work)",
+  "Client Notes",
+  "Ideas (Work)",
+  "Research",
+  "Training",
+  "Feedback",
+  "Planning",
+  "Email Drafts/Reminders",
+  "Course Notes",
+  "Book Notes",
+  "Article Notes",
+  "Language Learning",
+  "Skills Development",
+  "Writing Ideas",
+  "Music Ideas",
+  "Art Ideas",
+  "Design Ideas",
+  "Action Items",
+  "Questions",
+  "Follow-up",
+  "Decisions",
+  "Important",
+  "Urgent",
+  "Reference",
+  "Quotes",
+  "Inspiration",
 ];
 
 export default function Home() {
@@ -41,15 +74,20 @@ export default function Home() {
     stopRecording,
   } = useVoiceNotes();
 
-  const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
+  const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
+    null
+  );
   const [isLabelModalOpen, setIsLabelModalOpen] = useState(false);
 
   const handleLabelsChange = (newLabels: string[]) => {
     if (selectedItemIndex !== null) {
       const updatedItems = [...voiceItems];
-      updatedItems[selectedItemIndex] = { ...updatedItems[selectedItemIndex], labels: newLabels };
+      updatedItems[selectedItemIndex] = {
+        ...updatedItems[selectedItemIndex],
+        labels: newLabels,
+      };
       // You would typically update the state here. For now, we'll just log the change.
-      console.log('Updated items:', updatedItems);
+      console.log("Updated items:", updatedItems);
     }
   };
 
@@ -57,23 +95,26 @@ export default function Home() {
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-2 text-indigo-900">Smart Voice Notes</h1>
-          <p className="text-lg text-indigo-700">Capture your thoughts, organize your life</p>
+          <h1 className="text-4xl font-bold mb-2 text-indigo-900">
+            Smart Voice Notes
+          </h1>
+          <p className="text-lg text-indigo-700">
+            Capture your thoughts, organize your life
+          </p>
         </header>
 
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold text-gray-800">New Note</h2>
-            <RecordButton 
-              isRecording={isRecording} 
+            <RecordButton
+              isRecording={isRecording}
               isModelLoaded={isModelLoaded}
-              onStart={startRecording} 
-              onStop={stopRecording} 
+              onStart={startRecording}
+              onStop={stopRecording}
             />
           </div>
           {isProcessing && <ProcessingIndicator />}
         </div>
-        
+
         <AnimatePresence>
           {voiceItems.map((item, index) => (
             <motion.div
@@ -84,8 +125,8 @@ export default function Home() {
               transition={{ duration: 0.3 }}
               className="mb-4"
             >
-              <VoiceItemCard 
-                item={item} 
+              <VoiceItemCard
+                item={item}
                 onManageLabels={() => {
                   setSelectedItemIndex(index);
                   setIsLabelModalOpen(true);
@@ -94,11 +135,13 @@ export default function Home() {
             </motion.div>
           ))}
         </AnimatePresence>
-        
+
         {voiceItems.length === 0 && (
           <div className="text-center py-12">
             <Mic className="w-16 h-16 mx-auto text-indigo-300 mb-4" />
-            <p className="text-xl text-gray-600">No voice notes yet. Start recording!</p>
+            <p className="text-xl text-gray-600">
+              No voice notes yet. Start recording!
+            </p>
           </div>
         )}
 
@@ -120,7 +163,7 @@ export default function Home() {
             <Button onClick={() => setIsLabelModalOpen(false)}>Close</Button>
           </DialogContent>
         </Dialog>
-        <PerformanceMetrics 
+        <PerformanceMetrics
           data={performanceMetrics}
           isProcessing={isProcessing}
         />
@@ -128,4 +171,3 @@ export default function Home() {
     </main>
   );
 }
-
